@@ -13,14 +13,19 @@ public class ScoreBoard {
 	public ScoreBoard() {
 		this.home = new Team("HOM", "Home");
 		this.visitor = new Team("VIS", "Visitors");
-		this.scoretables = new ArrayList<ScoreTable>();
+		initScoreTable();
 	}
 	
 	public ScoreBoard(Team home, Team visitor) {
 		this.home = home;
 		this.visitor = visitor;
+		initScoreTable();
 	}
 
+	private void initScoreTable() {
+		this.scoretables = new ArrayList<ScoreTable>();
+	}
+	
 	public Team getHome() {
 		return home;
 	}

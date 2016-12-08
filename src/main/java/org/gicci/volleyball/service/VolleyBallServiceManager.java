@@ -12,7 +12,6 @@ public class VolleyBallServiceManager implements VolleyBallService {
 	private Integer remainingGameSet;
 	private Integer maxGameSetScore;
 	private Integer maxGameSetDecisionScore;
-	
 	private ScoreBoard scoreBoard;
 
 	public VolleyBallServiceManager() {}
@@ -31,6 +30,16 @@ public class VolleyBallServiceManager implements VolleyBallService {
 		this.maxGameSetDecisionScore = maxGameSetDecisionScore;
 	}
 
+	@Override
+	public String getHomeName() {
+		return this.scoreBoard.getHome().toString();
+	}
+	
+	@Override
+	public String getVisitorName() {
+		return this.scoreBoard.getVisitor().toString();
+	}
+	
 	@Override
 	public void scoreToHomeTeam(Integer value) {
 		ScoreTable scoreTable = this.scoreBoard.getScoretables().get(this.scoreBoard.getCurrentPeriod());
@@ -89,4 +98,16 @@ public class VolleyBallServiceManager implements VolleyBallService {
 		}
 		return totalOfHomeSetScore > totalOfVisitorSetScore ? scoreBoard.getHome() : scoreBoard.getVisitor();
 	}
+
+	@Override
+	public Integer getCurrentGameSet() {
+		return scoreBoard.getCurrentPeriod();
+	}
+
+	@Override
+	public void closeGameSet() {
+		scoreBoard.setCurrentPeriod(scoreBoard.getCurrentPeriod() + 1);
+	}
+	
+	
 }
