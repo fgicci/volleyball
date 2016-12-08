@@ -67,4 +67,29 @@ public class ScoreBoard {
 	public void increasePeriod() {
 		this.currentPeriod++;
 	}
+	
+	public Integer getScoreDifference() {
+		Integer difference = getScoretables().get(this.currentPeriod).getHomeScore() - getScoretables().get(this.currentPeriod).getVisitorScore();
+		return ((difference < 0) ? -difference : difference);
+	}
+	
+	public Integer getCurrentHomeScore() {
+		return getScoretables().get(this.currentPeriod).getHomeScore();
+	}
+	
+	public Integer getCurrentVisitorScore() {
+		return getScoretables().get(this.currentPeriod).getVisitorScore();
+	}
+	
+	public Integer getCurrentHomeGame() {
+		return getScoretables().get(this.currentPeriod).getHomeGame();
+	}
+	
+	public Integer getCurrentVisitorGame() {
+		return getScoretables().get(this.currentPeriod).getVisitorGame();
+	}
+	
+	public Integer getNumberOfGameSet() {
+		return getScoretables().size();
+	}
 }
