@@ -22,9 +22,9 @@ public class MatchExecutor extends SwingWorker<Void, String> {
 	protected Void doInBackground() throws Exception {
 		displayInitialMessages();
 		do {
-			strbuilder.append("Game Set: " + (volleyBallService.getCurrentGameSet()));
+			strbuilder.append("Game Set: " + volleyBallService.getCurrentGameSet());
 			if (volleyBallService.isTieBreak()) strbuilder.append(" - Tie Break!!!");
-			publish(strbuilder.toString());
+			publish(strbuilder.toString() + "\n");
 			
 			if (homeStarts()) processHomeServing();
 			else processVisitorServing();
@@ -83,10 +83,11 @@ public class MatchExecutor extends SwingWorker<Void, String> {
 	 * Process serving by Home team.
 	 */
 	private void processHomeServing() {
+		this.strbuilder = new StringBuilder();
 		strbuilder.append(volleyBallService.getHomeName() + " serving...");
 		Boolean servingResult = serve();
-		if (servingResult) strbuilder.append("Point! ");
-		else strbuilder.append("Fail! ");
+		if (servingResult) strbuilder.append("Point!\n");
+		else strbuilder.append("Fail!\n");
 		setHomeScored(servingResult);
 		publish(strbuilder.toString());
 	}
@@ -95,10 +96,11 @@ public class MatchExecutor extends SwingWorker<Void, String> {
 	 * Process serving by Visitor team.
 	 */
 	private void processVisitorServing() {
+		this.strbuilder = new StringBuilder();
 		strbuilder.append(volleyBallService.getVisitorName() + " serving...");
 		Boolean servingResult = serve();
-		if (servingResult) strbuilder.append("Point! ");
-		else strbuilder.append(" Fail! ");
+		if (servingResult) strbuilder.append("Point!\n");
+		else strbuilder.append(" Fail!\n");
 		setVisitorScored(servingResult);
 		publish(strbuilder.toString());
 	}
@@ -118,13 +120,14 @@ public class MatchExecutor extends SwingWorker<Void, String> {
 	 * @param Scored result
 	 */
 	private void setHomeScored(Boolean homescored) {
+		this.strbuilder = new StringBuilder();
 		if (homescored) {
 			volleyBallService.scoreToHomeTeam(1);
-			strbuilder.append("Point for " + volleyBallService.getHomeName() + "! ");
+			strbuilder.append("Point for " + volleyBallService.getHomeName() + "!\n");
 		//	this.volleyset.addHomeScore(this.volleyset.getCurrentGameSet(), this.home.getScore());
 		} else {
 			volleyBallService.scoreToVisitorTeam(1);
-			strbuilder.append("Point for " + volleyBallService.getVisitorName() + "! ");
+			strbuilder.append("Point for " + volleyBallService.getVisitorName() + "!\n");
 		//	this.volleyset.addVisitorScore(this.volleyset.getCurrentGameSet(), this.visitor.getScore());
 		}
 		this.homeScored = homescored;
@@ -147,13 +150,14 @@ public class MatchExecutor extends SwingWorker<Void, String> {
 	 * @param Scored result
 	 */
 	private void setVisitorScored(Boolean visitorscored) {
+		this.strbuilder = new StringBuilder();
 		if (visitorscored) {
 			volleyBallService.scoreToVisitorTeam(1);
-			strbuilder.append("Point for " + volleyBallService.getVisitorName() + "! ");
+			strbuilder.append("Point for " + volleyBallService.getVisitorName() + "!\n");
 		//	this.volleyset.addVisitorScore(this.volleyset.getCurrentGameSet(), this.visitor.getScore());
 		} else {
 			volleyBallService.scoreToHomeTeam(1);
-			strbuilder.append("Point for " + volleyBallService.getHomeName() + "! ");
+			strbuilder.append("Point for " + volleyBallService.getHomeName() + "!\n");
 		//	this.volleyset.addHomeScore(this.volleyset.getCurrentGameSet(), this.home.getScore());
 		}
 		this.visitorScored = visitorscored;
@@ -164,11 +168,12 @@ public class MatchExecutor extends SwingWorker<Void, String> {
 	 * Display initial message
 	 */	
 	private void displayInitialMessages() {
-		strbuilder.append("Here is the " + volleyBallService.getHomeName() + "!!! ");
+		this.strbuilder = new StringBuilder();
+		strbuilder.append("Here is the " + volleyBallService.getHomeName() + "!!!\n");
 		publish(strbuilder.toString());
-		strbuilder.append("Here is the " + volleyBallService.getVisitorName() + "!!! ");
+		strbuilder.append("Here is the " + volleyBallService.getVisitorName() + "!!!\n");
 		publish(strbuilder.toString());
-		strbuilder.append("Starting match: " + volleyBallService.getHomeName() + " vs " + volleyBallService.getVisitorName());
+		strbuilder.append("Starting match: " + volleyBallService.getHomeName() + " vs " + volleyBallService.getVisitorName() + "\n");
 		publish(strbuilder.toString());
 	}
 }
