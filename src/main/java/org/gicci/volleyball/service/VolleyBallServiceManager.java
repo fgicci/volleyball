@@ -55,13 +55,13 @@ public class VolleyBallServiceManager implements VolleyBallService {
 	@Override
 	public Integer getCurrentHomeScore() {
 		ScoreTable scoreTable = this.scoreBoard.getScoretables().get(this.scoreBoard.getCurrentPeriod());
-		scoreTable.setHomeScore(scoreTable.getHomeScore() + value);
+		return scoreTable.getHomeScore();
 	}
 
 	@Override
 	public Integer getCurrentVisitorScore() {
 		ScoreTable scoreTable = this.scoreBoard.getScoretables().get(this.scoreBoard.getCurrentPeriod());
-		scoreTable.setVisitorScore(scoreTable.getVisitorScore() + value);
+		return scoreTable.getVisitorScore();
 	}
 
 	@Override
