@@ -19,5 +19,7 @@ public interface VolleyBallService {
 	public List<ScoreTable> getResults();
 	public Team getWinner();
 	public Integer getCurrentGameSet();
+	public Integer getCurrentHomeScore();
+	public Integer getCurrentVisitorScore();
 	
 }

@@ -20,11 +20,11 @@ public class VolleyBallServiceManager implements VolleyBallService {
 	public void setup(Team home, Team visitor, Integer periods, Integer maxGameSetScore, Integer maxGameSetDecisionScore) {
 		if (periods % 2 == 0) periods++;
 		this.scoreBoard = new ScoreBoard(home, visitor);
-		for (int i = 1; i <= periods; i++) {
-			ScoreTable scoreTable = new ScoreTable(i, 0, 0);
+		for (int i = 0; i < periods; i++) {
+			ScoreTable scoreTable = new ScoreTable(i, 0, 0, 0, 0);
 			scoreBoard.addScoreTable(scoreTable);
 		}
-		this.scoreBoard.setCurrentPeriod(1);
+		this.scoreBoard.setCurrentPeriod(0);
 		this.remainingGameSet = scoreBoard.getNumberOfGameSet() / 2;
 		this.maxGameSetScore = maxGameSetScore;
 		this.maxGameSetDecisionScore = maxGameSetDecisionScore;
@@ -51,6 +51,18 @@ public class VolleyBallServiceManager implements VolleyBallService {
 		ScoreTable scoreTable = this.scoreBoard.getScoretables().get(this.scoreBoard.getCurrentPeriod());
 		scoreTable.setVisitorScore(scoreTable.getVisitorScore() + value);
 	}
+	
+	@Override
+	public Integer getCurrentHomeScore() {
+		ScoreTable scoreTable = this.scoreBoard.getScoretables().get(this.scoreBoard.getCurrentPeriod());
+		scoreTable.setHomeScore(scoreTable.getHomeScore() + value);
+	}
+
+	@Override
+	public Integer getCurrentVisitorScore() {
+		ScoreTable scoreTable = this.scoreBoard.getScoretables().get(this.scoreBoard.getCurrentPeriod());
+		scoreTable.setVisitorScore(scoreTable.getVisitorScore() + value);
+	}
 
 	@Override
 	public List<ScoreTable> getResults() {
@@ -61,7 +73,7 @@ public class VolleyBallServiceManager implements VolleyBallService {
 	public boolean isGameEnd() {
 		Integer currentHomeScore = scoreBoard.getCurrentHomeScore();
 		Integer currentVisitorScore = scoreBoard.getCurrentVisitorScore();
-		Integer maxScore = scoreBoard.getCurrentPeriod() == scoreBoard.getNumberOfGameSet() ? this.maxGameSetScore : this.maxGameSetDecisionScore;
+		Integer maxScore = getCurrentGameSet() == scoreBoard.getNumberOfGameSet() ? this.maxGameSetScore : this.maxGameSetDecisionScore;
 		
 		return ((currentHomeScore == maxScore || currentVisitorScore == maxScore) && // One of teams reach the max score
 				(currentHomeScore < maxScore || currentVisitorScore < maxScore) &&	// One of teams does not over the max score
@@ -73,7 +85,7 @@ public class VolleyBallServiceManager implements VolleyBallService {
 
 	@Override
 	public boolean isMatchEnd() {
-		Integer currentPeriod = scoreBoard.getCurrentPeriod();
+		Integer currentPeriod = getCurrentGameSet();
 		
 		int maxToWinTheGame = scoreBoard.getNumberOfGameSet() / 2;
 		if (currentPeriod > this.remainingGameSet) this.remainingGameSet--; // Reduce the remaning sets to finish the match.
@@ -85,7 +97,7 @@ public class VolleyBallServiceManager implements VolleyBallService {
 
 	@Override
 	public boolean isTieBreak() {
-		return scoreBoard.getCurrentPeriod() == scoreBoard.getNumberOfGameSet();
+		return getCurrentGameSet() == scoreBoard.getNumberOfGameSet();
 	}
 
 	@Override
@@ -101,12 +113,21 @@ public class VolleyBallServiceManager implements VolleyBallService {
 
 	@Override
 	public Integer getCurrentGameSet() {
-		return scoreBoard.getCurrentPeriod();
+		return scoreBoard.getCurrentPeriod() + 1;
 	}
 
 	@Override
 	public void closeGameSet() {
-		scoreBoard.setCurrentPeriod(scoreBoard.getCurrentPeriod() + 1);
+		Integer currentHomeScore = scoreBoard.getCurrentHomeScore();
+		Integer currentVisitorScore = scoreBoard.getCurrentVisitorScore();
+		if (currentHomeScore > currentVisitorScore) { 
+			ScoreTable scoreTable = this.scoreBoard.getScoretables().get(this.scoreBoard.getCurrentPeriod());
+			scoreTable.setHomeGame(scoreTable.getHomeGame() + 1);
+		} else {
+			ScoreTable scoreTable = this.scoreBoard.getScoretables().get(this.scoreBoard.getCurrentPeriod());
+			scoreTable.setVisitorGame(scoreTable.getVisitorGame() + 1);
+		}
+		scoreBoard.increasePeriod();
 	}
 	
 	

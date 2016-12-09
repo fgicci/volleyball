@@ -22,7 +22,8 @@ public class MatchExecutor extends SwingWorker<Void, String> {
 	protected Void doInBackground() throws Exception {
 		displayInitialMessages();
 		do {
-			strbuilder.append("Game Set: " + volleyBallService.getCurrentGameSet());
+			this.strbuilder = new StringBuilder();
+			strbuilder.append("\nGame Set: " + volleyBallService.getCurrentGameSet());
 			if (volleyBallService.isTieBreak()) strbuilder.append(" - Tie Break!!!");
 			publish(strbuilder.toString() + "\n");
 			
@@ -46,9 +47,10 @@ public class MatchExecutor extends SwingWorker<Void, String> {
 	 * Gives the result match at the end process.
 	 */
 	protected void done() {
+		this.strbuilder = new StringBuilder();
 		strbuilder.append("Match End! "); 
 		strbuilder.append(volleyBallService.getWinner().toString());
-		strbuilder.append(" won \n"); // + volleyset.getTotalHomeScore() + "-" + volleyset.getTotalVisitorScore() + " (");
+		strbuilder.append(" won!\n"); // + volleyset.getTotalHomeScore() + "-" + volleyset.getTotalVisitorScore() + " (");
 		/**
 		for (int index = 0; index < volleyset.getTotalSetGames(); index++) {
 			strbuilder.addMessage(volleyset.getHomeScore(index) + "-" + volleyset.getVisitorScore(index));
@@ -89,7 +91,7 @@ public class MatchExecutor extends SwingWorker<Void, String> {
 		if (servingResult) strbuilder.append("Point!\n");
 		else strbuilder.append("Fail!\n");
 		setHomeScored(servingResult);
-		publish(strbuilder.toString());
+		publishCurrentScore();
 	}
 	
 	/**
@@ -102,9 +104,13 @@ public class MatchExecutor extends SwingWorker<Void, String> {
 		if (servingResult) strbuilder.append("Point!\n");
 		else strbuilder.append(" Fail!\n");
 		setVisitorScored(servingResult);
-		publish(strbuilder.toString());
+		publishCurrentScore();
 	}
 	
+	private void publishCurrentScore() {
+		this.strbuilder.append(volleyBallService.getCurrentHomeScore() + " - " + volleyBallService.getCurrentVisitorScore());
+		publish(this.strbuilder.toString());
+	}
 	/**
 	 * Verify if the home team did the point after the serve
 	 * 
@@ -170,10 +176,8 @@ public class MatchExecutor extends SwingWorker<Void, String> {
 	private void displayInitialMessages() {
 		this.strbuilder = new StringBuilder();
 		strbuilder.append("Here is the " + volleyBallService.getHomeName() + "!!!\n");
-		publish(strbuilder.toString());
 		strbuilder.append("Here is the " + volleyBallService.getVisitorName() + "!!!\n");
-		publish(strbuilder.toString());
-		strbuilder.append("Starting match: " + volleyBallService.getHomeName() + " vs " + volleyBallService.getVisitorName() + "\n");
+		strbuilder.append("Starting match: " + volleyBallService.getHomeName() + " vs " + volleyBallService.getVisitorName());
 		publish(strbuilder.toString());
 	}
 }
