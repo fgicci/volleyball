@@ -52,7 +52,7 @@ public class ScoreTable {
 		return visitorGame;
 	}
 
-	public void setVisitGame(Integer visitorGame) {
+	public void setVisitorGame(Integer visitorGame) {
 		this.visitorGame = visitorGame;
 	}
 

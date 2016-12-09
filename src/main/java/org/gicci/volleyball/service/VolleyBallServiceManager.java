@@ -9,18 +9,37 @@ import org.gicci.volleyball.model.Team;
 public class VolleyBallServiceManager implements VolleyBallService {
 
 	private final int MAX_SCORE_DIF = 2;
+	private Integer remainingGameSet;
+	private Integer maxGameSetScore;
+	private Integer maxGameSetDecisionScore;
 	private ScoreBoard scoreBoard;
+
+	public VolleyBallServiceManager() {}
 	
 	@Override
-	public void init(Team home, Team visitor, Integer periods) {
+	public void setup(Team home, Team visitor, Integer periods, Integer maxGameSetScore, Integer maxGameSetDecisionScore) {
+		if (periods % 2 == 0) periods++;
 		this.scoreBoard = new ScoreBoard(home, visitor);
-		for (int i = 1; i <= periods; i++) {
-			ScoreTable scoreTable = new ScoreTable(i, 0, 0);
+		for (int i = 0; i < periods; i++) {
+			ScoreTable scoreTable = new ScoreTable(i, 0, 0, 0, 0);
 			scoreBoard.addScoreTable(scoreTable);
 		}
-		this.scoreBoard.setCurrentPeriod(1);
+		this.scoreBoard.setCurrentPeriod(0);
+		this.remainingGameSet = scoreBoard.getNumberOfGameSet() / 2;
+		this.maxGameSetScore = maxGameSetScore;
+		this.maxGameSetDecisionScore = maxGameSetDecisionScore;
 	}
 
+	@Override
+	public String getHomeName() {
+		return this.scoreBoard.getHome().toString();
+	}
+	
+	@Override
+	public String getVisitorName() {
+		return this.scoreBoard.getVisitor().toString();
+	}
+	
 	@Override
 	public void scoreToHomeTeam(Integer value) {
 		ScoreTable scoreTable = this.scoreBoard.getScoretables().get(this.scoreBoard.getCurrentPeriod());
@@ -32,6 +51,18 @@ public class VolleyBallServiceManager implements VolleyBallService {
 		ScoreTable scoreTable = this.scoreBoard.getScoretables().get(this.scoreBoard.getCurrentPeriod());
 		scoreTable.setVisitorScore(scoreTable.getVisitorScore() + value);
 	}
+	
+	@Override
+	public Integer getCurrentHomeScore() {
+		ScoreTable scoreTable = this.scoreBoard.getScoretables().get(this.scoreBoard.getCurrentPeriod());
+		return scoreTable.getHomeScore();
+	}
+
+	@Override
+	public Integer getCurrentVisitorScore() {
+		ScoreTable scoreTable = this.scoreBoard.getScoretables().get(this.scoreBoard.getCurrentPeriod());
+		return scoreTable.getVisitorScore();
+	}
 
 	@Override
 	public List<ScoreTable> getResults() {
@@ -40,20 +71,33 @@ public class VolleyBallServiceManager implements VolleyBallService {
 
 	@Override
 	public boolean isGameEnd() {
-		// TODO Auto-generated method stub
-		return false;
+		Integer currentHomeScore = scoreBoard.getCurrentHomeScore();
+		Integer currentVisitorScore = scoreBoard.getCurrentVisitorScore();
+		Integer maxScore = getCurrentGameSet() == scoreBoard.getNumberOfGameSet() ? this.maxGameSetScore : this.maxGameSetDecisionScore;
+		
+		return ((currentHomeScore == maxScore || currentVisitorScore == maxScore) && // One of teams reach the max score
+				(currentHomeScore < maxScore || currentVisitorScore < maxScore) &&	// One of teams does not over the max score
+				(scoreBoard.getScoreDifference() >= MAX_SCORE_DIF) // The difference of scores between the teams is greater and equal then max score difference 
+				|| // OR
+				(currentHomeScore > maxScore || currentVisitorScore > maxScore) &&  // One of teams reach more then the max score
+				(scoreBoard.getScoreDifference() >= MAX_SCORE_DIF)); // The difference of scores between the teams is greater and equal then max score difference
 	}
 
 	@Override
 	public boolean isMatchEnd() {
-		// TODO Auto-generated method stub
-		return false;
+		Integer currentPeriod = getCurrentGameSet();
+		
+		int maxToWinTheGame = scoreBoard.getNumberOfGameSet() / 2;
+		if (currentPeriod > this.remainingGameSet) this.remainingGameSet--; // Reduce the remaning sets to finish the match.
+		
+		return (currentPeriod > maxToWinTheGame && scoreBoard.getScoreDifference() > remainingGameSet) 
+				||
+				currentPeriod > scoreBoard.getNumberOfGameSet();
 	}
 
 	@Override
 	public boolean isTieBreak() {
-		// TODO Auto-generated method stub
-		return false;
+		return getCurrentGameSet() == scoreBoard.getNumberOfGameSet();
 	}
 
 	@Override
@@ -61,10 +105,28 @@ public class VolleyBallServiceManager implements VolleyBallService {
 		Integer totalOfHomeSetScore = 0;
 		Integer totalOfVisitorSetScore = 0;
 		for (ScoreTable scoreTable : scoreBoard.getScoretables()) {
-			totalOfHomeSetScore = scoreTable.getHomeGame();
-			totalOfVisitorSetScore = scoreTable.getVisitorGame();
+			totalOfHomeSetScore += scoreTable.getHomeGame();
+			totalOfVisitorSetScore += scoreTable.getVisitorGame();
 		}
 		return totalOfHomeSetScore > totalOfVisitorSetScore ? scoreBoard.getHome() : scoreBoard.getVisitor();
 	}
 
+	@Override
+	public Integer getCurrentGameSet() {
+		return scoreBoard.getCurrentPeriod() + 1;
+	}
+
+	@Override
+	public void closeGameSet() {
+		Integer currentHomeScore = scoreBoard.getCurrentHomeScore();
+		Integer currentVisitorScore = scoreBoard.getCurrentVisitorScore();
+		if (currentHomeScore > currentVisitorScore) { 
+			ScoreTable scoreTable = this.scoreBoard.getScoretables().get(this.scoreBoard.getCurrentPeriod());
+			scoreTable.setHomeGame(scoreTable.getHomeGame() + 1);
+		} else {
+			ScoreTable scoreTable = this.scoreBoard.getScoretables().get(this.scoreBoard.getCurrentPeriod());
+			scoreTable.setVisitorGame(scoreTable.getVisitorGame() + 1);
+		}
+		scoreBoard.increasePeriod();
+	}
 }
