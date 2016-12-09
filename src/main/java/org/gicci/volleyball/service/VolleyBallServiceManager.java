@@ -28,6 +28,7 @@ public class VolleyBallServiceManager implements VolleyBallService {
 		this.remainingGameSet = scoreBoard.getNumberOfGameSet() / 2;
 		this.maxGameSetScore = maxGameSetScore;
 		this.maxGameSetDecisionScore = maxGameSetDecisionScore;
+		System.out.println(scoreBoard);
 	}
 
 	@Override
@@ -85,9 +86,9 @@ public class VolleyBallServiceManager implements VolleyBallService {
 
 	@Override
 	public boolean isMatchEnd() {
-		Integer currentPeriod = getCurrentGameSet();
+		Integer currentPeriod = scoreBoard.getCurrentPeriod();
 		
-		int maxToWinTheGame = scoreBoard.getNumberOfGameSet() / 2;
+		int maxToWinTheGame = (scoreBoard.getNumberOfGameSet() - 1) / 2; // get the number of the last game set.
 		if (currentPeriod > this.remainingGameSet) this.remainingGameSet--; // Reduce the remaning sets to finish the match.
 		
 		return (currentPeriod > maxToWinTheGame && scoreBoard.getScoreDifference() > remainingGameSet) 
@@ -108,6 +109,8 @@ public class VolleyBallServiceManager implements VolleyBallService {
 			totalOfHomeSetScore += scoreTable.getHomeGame();
 			totalOfVisitorSetScore += scoreTable.getVisitorGame();
 		}
+		System.out.println("totalOfHomeSetScore -> " + totalOfHomeSetScore);
+		System.out.println("totalOfVisitorSetScore -> " + totalOfVisitorSetScore);
 		return totalOfHomeSetScore > totalOfVisitorSetScore ? scoreBoard.getHome() : scoreBoard.getVisitor();
 	}
 
@@ -122,10 +125,10 @@ public class VolleyBallServiceManager implements VolleyBallService {
 		Integer currentVisitorScore = scoreBoard.getCurrentVisitorScore();
 		if (currentHomeScore > currentVisitorScore) { 
 			ScoreTable scoreTable = this.scoreBoard.getScoretables().get(this.scoreBoard.getCurrentPeriod());
-			scoreTable.setHomeGame(scoreTable.getHomeGame() + 1);
+			scoreTable.setHomeGame(1);
 		} else {
 			ScoreTable scoreTable = this.scoreBoard.getScoretables().get(this.scoreBoard.getCurrentPeriod());
-			scoreTable.setVisitorGame(scoreTable.getVisitorGame() + 1);
+			scoreTable.setVisitorGame(1);
 		}
 		scoreBoard.increasePeriod();
 	}

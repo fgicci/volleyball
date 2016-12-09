@@ -63,7 +63,9 @@ public class VolleyBallFrame extends JFrame implements ActionListener, PropertyC
 		lblNumPoint = new JLabel("Max Point");
 		lblDecidePoint = new JLabel("Tie Break Point");
 		txtHome = new JTextField(30);
+		txtHome.setText("HOME");
 		txtVisitor = new JTextField(30);
+		txtVisitor.setText("VISITORS");
 		txtNumGames = new JTextField(10);
 		txtNumGames.setText("3");
 		txtNumPoint = new JTextField(10);

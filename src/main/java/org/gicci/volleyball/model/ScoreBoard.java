@@ -97,4 +97,53 @@ public class ScoreBoard {
 	public Integer getNumberOfGameSet() {
 		return getScoretables().size();
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((currentPeriod == null) ? 0 : currentPeriod.hashCode());
+		result = prime * result + ((home == null) ? 0 : home.hashCode());
+		result = prime * result + ((scoretables == null) ? 0 : scoretables.hashCode());
+		result = prime * result + ((visitor == null) ? 0 : visitor.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ScoreBoard other = (ScoreBoard) obj;
+		if (currentPeriod == null) {
+			if (other.currentPeriod != null)
+				return false;
+		} else if (!currentPeriod.equals(other.currentPeriod))
+			return false;
+		if (home == null) {
+			if (other.home != null)
+				return false;
+		} else if (!home.equals(other.home))
+			return false;
+		if (scoretables == null) {
+			if (other.scoretables != null)
+				return false;
+		} else if (!scoretables.equals(other.scoretables))
+			return false;
+		if (visitor == null) {
+			if (other.visitor != null)
+				return false;
+		} else if (!visitor.equals(other.visitor))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "ScoreBoard [home=" + home + ", visitor=" + visitor + ", currentPeriod=" + currentPeriod
+				+ ", scoretables=" + scoretables + "]";
+	}
 }
