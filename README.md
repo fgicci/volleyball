@@ -5,5 +5,9 @@ Write a Java program that prints the scores of a game of volleyball. Points are 
 numbers of games/sets (default: 3)
 number of points to win a game/set (default: 21)
 number of points for the decider game/set (default: 15)
+
 optional max number of points (e.g. first team reaching this number of points wins)
-At the end, the program should print the winner team and the final result and its scores e.g. Team Rated People won 2-1 (21-12, 19-21, 15-12). Version a) For every point, it should prompt for the team that won the point. It is expected for the program to have unit tests to check the functionality. Version b) For every point, the decision of who won the point should be random.
+At the end, the program should print the winner team and the final result and its scores e.g. Team Rated People won 2-1 (21-12, 19-21, 15-12). 
+
+Version a) For every point, it should prompt for the team that won the point. It is expected for the program to have unit tests to check the functionality. 
+Version b) For every point, the decision of who won the point should be random.
