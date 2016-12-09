@@ -63,6 +63,6 @@ public class Team {
 
 	@Override
 	public String toString() {
-		return "Team [short name=" + shortName + ", name=" + fullName + "]";
+		return fullName;
 	}
 }

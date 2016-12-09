@@ -1,9 +1,17 @@
 package org.gicci.volleyball.app;
 
+import javax.swing.JFrame;
+
+import org.gicci.volleyball.gui.VolleyBallFrame;
+
 public class VolleyBallApp {
 
 	public static void main(String[] args) {
-		System.out.println("volleyball app ... running.");
+		javax.swing.SwingUtilities.invokeLater(() -> {
+			VolleyBallFrame frame = new VolleyBallFrame();
+            frame.setVisible(true);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        });
 	}
 
 }

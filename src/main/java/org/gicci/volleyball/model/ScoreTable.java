@@ -10,10 +10,12 @@ public class ScoreTable {
 	
 	public ScoreTable() {}
 
-	public ScoreTable(Integer period, Integer homeScore, Integer visitorScore) {
+	public ScoreTable(Integer period, Integer homeScore, Integer visitorScore, Integer homeGame, Integer visitorGame) {
 		this.period = period;
 		this.homeScore = homeScore;
 		this.visitorScore = visitorScore;
+		this.homeGame = homeGame;
+		this.visitorGame = visitorGame;
 	}
 
 	public Integer getPeriod() {
