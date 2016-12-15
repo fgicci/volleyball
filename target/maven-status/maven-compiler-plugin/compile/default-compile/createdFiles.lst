@@ -1,0 +1,6 @@
+org\gicci\volleyball\model\Team.class
+org\gicci\volleyball\service\VolleyBallServiceManager.class
+org\gicci\volleyball\model\ScoreTable.class
+org\gicci\volleyball\service\VolleyBallService.class
+org\gicci\volleyball\thread\MatchExecutor.class
+org\gicci\volleyball\model\ScoreBoard.class

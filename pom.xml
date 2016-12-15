@@ -5,4 +5,28 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>volleyball</name>
   <description>Coding challenge to simulate a scoring system for volleyball game</description>
+  <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+  </properties>
+	
+  <build>
+  	<plugins>
+	   <plugin>
+	      <groupId>org.apache.maven.plugins</groupId>
+	      <artifactId>maven-jar-plugin</artifactId>
+	      <configuration>
+	         <archive>
+	         	<manifest>
+					<addClasspath>true</addClasspath>
+					<mainClass>org.gicci.volleyball.app.VolleyBallApp</mainClass>
+					<classpathPrefix>dependency-jars/</classpathPrefix>
+				</manifest>
+	         </archive>
+	      </configuration>
+	   </plugin>
+	</plugins>
+  </build>
+</project>
 </project>
